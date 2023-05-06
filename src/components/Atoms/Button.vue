@@ -1,6 +1,7 @@
 <template>
   <button :class="type">
     {{ buttonText }}
+    <slot />
   </button>
 </template>
 
@@ -11,7 +12,8 @@ export default {
   props: {
       buttonText: {
           type: String,
-          required: true
+          required: false,
+          default: ''
       },
       type: {
           type: String,
@@ -27,16 +29,23 @@ export default {
   button {
       padding: 10px 20px;
       border: 0;
-      border-radius: 10px;
+      border-radius: 5px;
       cursor: pointer;
       background: none;
+      transition: 0.4s ease all;
   }
   .save {
       color: #fff;
       background-color: blue;
   }
   .remove {
-      background-color: tomato;
+      background-color: #FCA311;
       color: #fff;
+  }
+  .util {
+      background-color: #f1f1f1;
+  }
+  .util:hover {
+      background-color: #ccc;
   }
 </style>

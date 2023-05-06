@@ -1,10 +1,10 @@
 <template>
   <div>
     <label>
-      <p>{{ title }} </p>
+      <p v-if="title">{{ title }} </p>
       <input
         v-model="inputValue"
-        class="p-2 bg-main-gray border-b-2 w-full rouded"
+        class="p-2 bg-main-gray border-b-2 w-full rounded"
         :class="{error: error}"
         :type="type"
         :disabled="disabled"
@@ -17,15 +17,15 @@
 export default {
     name: 'InputField',
     props: {
+        title: {
+            type: String,
+            default: '',
+            requred: false
+        },
         type: {
             type: String,
             default: 'text',
-            requred: true
-        },
-        title: {
-            type: String,
-            default: 'Selector',
-            requred: true
+            requred: false
         },
         value: {
             type: [String, Number],
@@ -45,19 +45,26 @@ export default {
         },
         placeholder: {
             type: String,
-            default: 'Search for...',
+            default: '',
             required: false
         },
     },
     emits: ['input'],
     data() {
         return {
-            inputValue: null
+            inputValue: null,
+            timer: null,
+            timeout: 300,
+            mounted: false,
         };
     },
     watch: {
         inputValue(newValue) {
-            this.$emit('input', newValue);
+            if(newValue === this.value) return;
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => {
+                this.$emit('input', newValue);
+            }, this.timeout);
         },
         value(newValue) {
             if(newValue !== this.inputValue) {
@@ -69,6 +76,8 @@ export default {
         if(this.value) {
             this.inputValue = this.value;
         }
+
+        this.mounted = true;
     }
 }
 </script>

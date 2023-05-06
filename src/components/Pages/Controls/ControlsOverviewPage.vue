@@ -1,5 +1,7 @@
 <template>
-  Header
+  <div>
+    Controls overview page
+  </div>
 </template>
 
 <script>

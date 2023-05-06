@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import InputField from '../Atoms/InputField.vue';
+import InputField from '../Atoms/Fields/InputField.vue';
 import Notification from '../Atoms/Notification.vue';
 import Button from '../Atoms/Button.vue';
 //import { mapActions } from 'vuex';
