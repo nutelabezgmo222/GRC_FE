@@ -1,14 +1,15 @@
 <template>
   <div class="flex flex-row-reverse h-full relative">
     <Navbar
+      v-if="isUserLogged"
       class="w-1/5 absolute top-0 bottom-0 transition-all"
       :class="hideNavbar ? '-left-full' : ' left-0'"
-      :items="navItems"
+      :tabs="tabs"
       @hide="hideNavbar = true" />
 
     <div
       class="main relative overflow-hidden w-4/5 bg-main-gray p-3 pr-0 transition-all"
-      :class="hideNavbar ? 'w-full' : ''">
+      :class="[hideNavbar || !isUserLogged ? 'w-full' : '', isUserLogged ? 'bg-main-gray' : 'bg-white']">
       <router-view
         class="mb-4"
         name="header" />
@@ -34,6 +35,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 import Navbar from './components/Molecules/Navbar.vue';
 import Subbar from './components/Molecules/Subbar.vue';
 import Button from './components/Atoms/Button.vue';
@@ -51,13 +54,25 @@ export default {
     },
     data() {
         return {
-            navigation,
-            hideNavbar: false
+            tabs: navigation,
+            selectedTab: null,
+            hideNavbar: false,
         };
     },
     computed: {
+        ...mapGetters(['isUserLogged']),
+        tabItems() {
+            if (!this.tabs) return [];
+
+            return this.tabs.map(item => ({
+                title: item.title,
+                icon: item.icon
+            }));
+        },
         navItems() {
-            return this.navigation.map(item => ({
+            if (!this.selectedTab) return [];
+            
+            return this.selectedTab.children.map(item => ({
                 title: item.title,
                 path: item.path,
                 icon: item.icon
@@ -67,8 +82,8 @@ export default {
 
         }
     },
-    mounted() {
-        console.log(this.$route);
+    beforeMount() {
+        this.selectedTab = this.tabs[0];
     },
 };
 </script>

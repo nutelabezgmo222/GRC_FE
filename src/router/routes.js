@@ -8,8 +8,16 @@ import ControlsOverviewPage from '../components/Pages/Controls/ControlsOverviewP
 import RiskEntryPage from '../components/Pages/Risks/RiskEntryPage.vue';
 
 const routes = [
-    { path: '/', component: LoginPage },
-    { path: '/main', component: MainPage },
+    { path: '/', redirect: { name: 'LoginPage' }},
+    { path: '/login', component: LoginPage, name: 'LoginPage' },
+    {
+        path: '/logout',
+        component: LoginPage,
+        props: {
+            logout: true
+        }
+    },
+    { path: '/main', component: MainPage, name: 'MainPage' },
     {
         path: '/risks',
         redirect: { name: 'RiskOverviewPage' },

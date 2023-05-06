@@ -1,23 +1,29 @@
 <template>
-  <div>
+  <div class="flex">
     <form
-      class="flex flex-col items-center"
+      class="flex flex-col items-center p-5 w-1/2"
       @submit.prevent>
-      <notification
+      <Notification
         :message="errorMessage"
         :hide-after="5000"
         class="mb-3" />
-      <input-field
-        title="Login"
-        type="text"
-        :value="login"
-        @input="login = $event" />
 
-      <input-field
-        title="Password"
-        type="password"
-        :value="password"
-        @input="password = $event" />
+      <div class="mb-5">
+        <InputField
+          title="Login"
+          type="text"
+          class="bg-white"
+          :value="loginStr"
+          @input="loginStr = $event" />
+      </div>
+
+      <div class="mb-5">
+        <InputField
+          title="Password"
+          type="password"
+          :value="password"
+          @input="password = $event" />
+      </div>
 
       <div>
         <Button
@@ -26,18 +32,13 @@
           class="w-56"
           @click="onLogin" />
       </div>
-
-      <div class="flex items-center mt-3">
-        <p class="mr-3">
-          Dont have an account?
-        </p>
-        <router-link
-          :to="'/register?from=' + routerFromQuery"
-          class="text-sm underline">
-          Create a new one
-        </router-link>
-      </div>
     </form>
+
+    <div
+      v-if="logout"
+      class="w-1/2">
+      You are successfully logged out
+    </div>
   </div>
 </template>
 
@@ -45,7 +46,7 @@
 import InputField from '../Atoms/Fields/InputField.vue';
 import Notification from '../Atoms/Notification.vue';
 import Button from '../Atoms/Button.vue';
-//import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
     components: {
@@ -53,24 +54,42 @@ export default {
         Notification,
         Button
     },
+    props: {
+        logout: {
+            type: Boolean,
+            required: false,
+            default: false
+        }
+    },
     data() {
         return {
-            login: '',
+            loginStr: '',
             password: '',
             errorMessage: ''
         };
     },
     computed: {
+        ...mapGetters(['isUserLogged']),
         routerFromQuery() {
-            return this.$route?.query.from || '';
+            return this.$route?.query.from || 'main';
         },
     },
+    mounted() {
+        if (this.logout) {
+            this.userLogout();
+        }
+    },
+    beforeMount() {
+        if(this.isUserLogged) {
+            this.$router.push('/main');
+        }
+    },
     methods: {
-        //...mapActions(['logIn']),
+        ...mapActions({login: 'login', userLogout: 'logout'}),
         onLogin() {
             this.errorMessage = '';
 
-            return this.logIn(this.getLoginData())
+            return this.login(this.getLoginData())
                 .then(() => {
                     this.$router.push('/' + this.routerFromQuery);
                 })
@@ -78,10 +97,9 @@ export default {
                     this.errorMessage = 'Password or email is incorrect';
                 });
         },
-        logIn() {},
         getLoginData() {
             return {
-                email: this.login,
+                email: this.loginStr,
                 password: this.password
             };
         }

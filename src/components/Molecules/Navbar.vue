@@ -21,16 +21,13 @@
       </div>
 
       <div class="grid grid-cols-3 justify-items-center gap-4 mb-4">
-        <div class="icon-wrapper selected">
-          <FeatherIcon icon="user" />
-        </div>
-
-        <div class="icon-wrapper">
-          <FeatherIcon icon="settings" />
-        </div>
-
-        <div class="icon-wrapper">
-          <FeatherIcon icon="bell" />
+        <div
+          v-for="tab in tabs"
+          :key="tab.tab"
+          class="icon-wrapper"
+          :class="{selected: tab.tab === selectedTab?.tab}"
+          @click="onTabChange(tab.tab)">
+          <FeatherIcon :icon="tab.icon" />
         </div>
       </div>
 
@@ -42,7 +39,7 @@
 
       <div class="mb-4 overflow-auto">
         <div
-          v-for="(item, idx) in items"
+          v-for="(item, idx) in navItems"
           :key="idx"
           class="border-b border-lightgray hover:bg-lightgray transition">
           <router-link
@@ -73,10 +70,34 @@ export default {
         Button
     },
     props: {
-        items: {
+        tabs: {
             type: Array,
             required: true,
             default: () => []
+        },
+    },
+    data() {
+        return {
+            selectedTab: null
+        };
+    },
+    computed: {
+        navItems() {
+            if (!this.selectedTab) return [];
+            
+            return this.selectedTab.children.map(item => ({
+                title: item.title,
+                path: item.path,
+                icon: item.icon
+            }));
+        },
+    },
+    beforeMount() {
+        this.selectedTab = this.tabs?.[0];
+    },
+    methods: {
+        onTabChange(tabName) {
+            this.selectedTab = this.tabs.find(tab => tab.tab === tabName);
         },
     },
 };
