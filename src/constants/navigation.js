@@ -3,10 +3,12 @@ export default [{
     icon: 'user',
     children: [{
         title: 'Main',
+        name: 'MainPage',
         path: '/main',
         icon: 'database'
     },{
         title: 'Risks',
+        name: 'RisksWrapper',
         path: '/risks',
         icon: 'alert-circle',
         children: [{
@@ -21,6 +23,7 @@ export default [{
         }],
     }, {
         title: 'Controls',
+        name: 'ControlWrapper',
         path: '/controls',
         icon: 'edit',
         children: [{

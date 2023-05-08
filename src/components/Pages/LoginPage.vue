@@ -79,11 +79,6 @@ export default {
             this.userLogout();
         }
     },
-    beforeMount() {
-        if(this.isUserLogged) {
-            this.$router.push('/main');
-        }
-    },
     methods: {
         ...mapActions({login: 'login', userLogout: 'logout'}),
         onLogin() {
