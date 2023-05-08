@@ -1,7 +1,15 @@
 <template>
   <div>
     <div class="mb-4">
-      RiskOverviewPage
+      <Button
+        type="save"
+        @click="showCreationModal = true">
+          <span>Create new Risk</span>
+      </Button>
+
+      <RiskCreationModal
+        :show="showCreationModal"
+        @cancel="showCreationModal = false"/>
     </div>
 
     <div>
@@ -20,6 +28,8 @@ import { getRisks } from '../../../api/risks';
 
 import ItemsList from '../../Molecules/Items/ItemsList.vue';
 import LoadingIndicator from '../../Atoms/LoadingIndicator.vue';
+import Button from '../../Atoms/Button.vue';
+import RiskCreationModal from '../../Molecules/Modals/RiskCreationModal.vue';
 
 import { ObjectTypes } from '../../../constants/ObjectTypes';
 
@@ -27,10 +37,13 @@ export default {
     components: {
         ItemsList,
         LoadingIndicator,
+        Button,
+        RiskCreationModal,
     },
     data() {
         return {
             loading: false,
+            showCreationModal: false,
             risks: [],
             ObjectTypes
         };

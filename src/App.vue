@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row-reverse h-full relative">
+  <div class="app flex flex-row-reverse h-full relative">
     <Navbar
       v-if="isUserLogged"
       class="w-1/5 absolute top-0 bottom-0 transition-all"
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 import Navbar from './components/Molecules/Navbar.vue';
 import Subbar from './components/Molecules/Subbar.vue';
@@ -100,9 +100,11 @@ export default {
     },
     beforeMount() {
         this.selectedTab = this.tabs[0];
+
+        this.getAllUsers();
     },
-    mounted() {
-      console.log(this.$route)
+    methods: {
+        ...mapActions(['getAllUsers'])
     },
 };
 </script>
