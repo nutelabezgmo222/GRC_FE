@@ -20,6 +20,7 @@ const routes = [
     { path: '/main', component: MainPage, name: 'MainPage' },
     {
         path: '/risks',
+        name: 'RisksWrapper',
         redirect: { name: 'RiskOverviewPage' },
         children: [{
             path: 'overview',
@@ -43,6 +44,7 @@ const routes = [
     },
     {
         path: '/controls',
+        name: 'ControlsWrapper',
         redirect: { name: 'ControlsOverviewPage' },
         children: [{
             path: 'overview',

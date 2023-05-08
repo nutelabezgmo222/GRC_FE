@@ -10,9 +10,17 @@
     <div
       class="main relative overflow-hidden w-4/5 bg-main-gray p-3 pr-0 transition-all"
       :class="[hideNavbar || !isUserLogged ? 'w-full' : '', isUserLogged ? 'bg-main-gray' : 'bg-white']">
-      <router-view
-        class="mb-4"
-        name="header" />
+      <div>
+        <router-view
+          class="mb-4"
+          name="header" />
+      </div>
+
+      <div
+        v-if="subbarItems.length"
+        class="mb-4">
+        <Subbar :items="subbarItems" />
+      </div>
 
       <div class="flex flex-col h-full">
         <router-view class="flex-grow" name="default" />
@@ -69,21 +77,32 @@ export default {
                 icon: item.icon
             }));
         },
-        navItems() {
-            if (!this.selectedTab) return [];
-            
-            return this.selectedTab.children.map(item => ({
-                title: item.title,
-                path: item.path,
-                icon: item.icon
-            }));
+        allNavItems() {
+            if (!this.tabs) return [];
+
+            return this.tabs.reduce((result, tab) => {
+                tab.children && result.push(...tab.children);
+
+                return result;
+            }, []);
         },
         currentNavItem() {
+            if (!this.allNavItems?.length) return;
+            const allMatchedNames = this.$route.matched.map(match => match.name);
 
-        }
+            return this.allNavItems.find(item => allMatchedNames.includes(item.name));
+        },
+        subbarItems() {
+            if (!this.currentNavItem) return []
+
+            return this.currentNavItem.children || [];
+        },
     },
     beforeMount() {
         this.selectedTab = this.tabs[0];
+    },
+    mounted() {
+      console.log(this.$route)
     },
 };
 </script>
