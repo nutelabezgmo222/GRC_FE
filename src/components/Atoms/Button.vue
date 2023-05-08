@@ -36,7 +36,7 @@ export default {
   }
   .save {
       color: #fff;
-      background-color: blue;
+      background-color: #0077b6;
   }
   .remove {
       background-color: #FCA311;

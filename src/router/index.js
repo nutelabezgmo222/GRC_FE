@@ -11,10 +11,12 @@ router.beforeEach(async (to, _, next) => {
     let isAuthorized = store.getters.isUserLogged;
  
     if (!isAuthorized) {
-        console.log('trying to login');
-        await store.dispatch('tryToLogin');
+        try {
+            console.log('trying to login');
+            await store.dispatch('tryToLogin');
 
-        isAuthorized = store.getters.isUserLogged;
+            isAuthorized = store.getters.isUserLogged;
+        } catch {}
     }
 
     if (!isAuthorized && to.name !== 'LoginPage') {

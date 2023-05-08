@@ -59,29 +59,6 @@ export default {
         };
     },
 };
-
-// export default {
-//     components: {
-//         FeatherIcon,
-//     },
-//     props: {
-//         dataObj: {
-//             type: Object,
-//             required: true,
-//             default: () => ({}),
-//             validator: item => item.objType
-//         },
-//     },
-//     data() {
-//         return {
-//             display: false,
-//             dataInstance: null
-//         };
-//     },
-//     mounted() {
-//         this.dataInstance = getItemComponentByObj(this.dataObj);
-//     },
-// };
 </script>
 
 <style scoped>

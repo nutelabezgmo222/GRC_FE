@@ -10,6 +10,11 @@ export const getRisk = (id) => {
         .then(response => response.data);
 };
 
+export const createRisk = (data) => {
+    return Http().post('/risk', data)
+        .then(response => response.data);
+};
+
 export const updateRisk = (id, propsToUpdate) => {
     return Http().patch('/risk/' + id, propsToUpdate)
         .then(response => response.data);
