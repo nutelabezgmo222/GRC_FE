@@ -9,6 +9,7 @@
 
       <RiskCreationModal
         :show="showCreationModal"
+        @created="onRiskCreate"
         @cancel="showCreationModal = false"/>
     </div>
 
@@ -62,6 +63,10 @@ export default {
                     this.risks = list;
                     this.loading = false;
                 });
+        },
+        onRiskCreate(newRisk) {
+            this.risks.push(newRisk);
+            this.showCreationModal = false;
         },
     },
 };

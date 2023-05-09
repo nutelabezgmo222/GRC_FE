@@ -13,7 +13,7 @@
         <div
           v-if="display"
           class="absolute inset-0">
-          <div class="preview-container absolute bg-white">
+          <div class="preview-container absolute bg-white rounded-md">
             <component
               v-if="dataInstance.component"
               :is="dataInstance.component"
