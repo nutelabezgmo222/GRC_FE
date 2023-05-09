@@ -1,5 +1,6 @@
 <template>
   <div class="h-full">
+    <Notification :message="notificationMessages" />
     <LoadingIndicator
       v-if="loading"
       class="h-full" />
@@ -98,6 +99,7 @@ import TextField from '../../Atoms/Fields/TextField.vue';
 import SelectorField from '../../Atoms/Fields/SelectorField.vue';
 import Title from '../../Atoms/Title.vue';
 import Button from '../../Atoms/Button.vue';
+import Notification from '../../Atoms/Notification.vue';
 
 export default {
     components: {
@@ -106,7 +108,8 @@ export default {
         TextField,
         SelectorField,
         Title,
-        Button
+        Button,
+        Notification
     },
     props: {
         id: {
@@ -119,7 +122,8 @@ export default {
     data() {
         return {
             risk: null,
-            loading: false
+            loading: false,
+            notificationMessages: []
         };
     },
     computed: {
@@ -147,8 +151,22 @@ export default {
                 ...props
             };
 
+            if (!this.validate()) return;
+
             return updateRisk(this.risk.id, props);
         },
+        validate() {
+            this.notificationMessages = [];
+
+            if (!this.risk.title) {
+                this.notificationMessages.push('You can`t save risk with empty title');
+            }
+            if (!this.risk.responsibles.length) {
+                this.notificationMessages.push('Risk should have at least one responsible person');
+            }
+
+            return !this.notificationMessages.length;
+        }
     },
 };
 </script>

@@ -1,29 +1,41 @@
 <template>
-  <transition>
-    <div
-      v-if="notificationMessage.length"
-      class="p-5"
-      :class="[{'bg-red-300': type === 'error'}]">
-      <div v-if="typeof notificationMessage === 'string'">
-        {{ notificationMessage }}
+  <Teleport to=".app">
+    <Transition name="fade">
+      <div
+        v-if="notificationMessage?.length"
+        class="p-5 fixed bottom-0 inset-x-0 z-30"
+        :class="[{'bg-red-300': type === 'error'}]">
+        <div v-if="typeof notificationMessage === 'string'">
+          {{ notificationMessage }}
+        </div>
+        <div v-if="Array.isArray(notificationMessage)">
+          <ul>
+            <li 
+              v-for="(item, idx) in notificationMessage"
+              :key="idx">
+              {{ item }}
+            </li>
+          </ul>
+        </div>
+
+        <div
+          class="cursor-pointer absolute top-5 right-6"
+          @click="notificationMessage = ''">
+          <FeatherIcon icon="x" />
+        </div>
       </div>
-      <div v-if="Array.isArray(notificationMessage)">
-        <ul>
-          <li 
-            v-for="(item, idx) in notificationMessage"
-            :key="idx">
-            {{ item }}
-          </li>
-        </ul>
-      </div>
-    </div>
-  </transition>
+    </Transition>
+  </Teleport>
 </template>
 
 <script>
+import FeatherIcon from './FeatherIcon.vue';
 const Types = ['error', 'success'];
 
 export default {
+    components: {
+        FeatherIcon
+    },
     props: {
         type: {
             type: String,
@@ -55,7 +67,7 @@ export default {
         },
     },
     mounted() {
-        
+        this.initMessage(this.message);
     },
     methods: {
         initMessage(message) {
@@ -73,13 +85,13 @@ export default {
 </script>
 
 <style>
-.v-enter-active,
-.v-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.5s ease;
 }
 
-.v-enter-from,
-.v-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 
