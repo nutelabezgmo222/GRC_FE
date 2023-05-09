@@ -30,6 +30,7 @@ import ItemsList from '../../Molecules/Items/ItemsList.vue';
 import LoadingIndicator from '../../Atoms/LoadingIndicator.vue';
 import Button from '../../Atoms/Button.vue';
 import RiskCreationModal from '../../Molecules/Modals/RiskCreationModal.vue';
+import Notification from '../../Atoms/Notification.vue';
 
 import { ObjectTypes } from '../../../constants/ObjectTypes';
 
@@ -39,6 +40,7 @@ export default {
         LoadingIndicator,
         Button,
         RiskCreationModal,
+        Notification
     },
     data() {
         return {
