@@ -161,7 +161,7 @@ export default {
             if (!this.risk.title) {
                 this.notificationMessages.push('You can`t save risk with empty title');
             }
-            if (!this.risk.responsibles.length) {
+            if (!this.risk.responsible.length) {
                 this.notificationMessages.push('Risk should have at least one responsible person');
             }
 

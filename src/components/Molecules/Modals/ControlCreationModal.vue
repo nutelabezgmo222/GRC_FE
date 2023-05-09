@@ -2,11 +2,11 @@
   <div>
     <Modal
       :show="show"
-      title="Create new risk"
+      title="Create new control"
       @submit="onModalSubmit"
       @cancel="$emit('cancel')">
       <template #body>
-        <LoadingIndicator v-if="loading" />
+        <LoadingIndicator v-if="loading"/>
 
         <div v-else>
           <div class="mb-4">
@@ -40,7 +40,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { createRisk } from '../../../api/risks';
+import { createControl } from '../../../api/controls';
 
 import Modal from './Modal.vue';
 import InputField from '../../Atoms/Fields/InputField.vue';
@@ -51,13 +51,13 @@ import LoadingIndicator from '../../Atoms/LoadingIndicator.vue';
 
 export default {
     components: {
-        Modal,
-        InputField,
-        Title,
-        MyMultiselect,
-        Notification,
-        LoadingIndicator
-    },
+    Modal,
+    InputField,
+    Title,
+    MyMultiselect,
+    Notification,
+    LoadingIndicator
+},
     props: {
         show: {
             type: Boolean,
@@ -69,9 +69,9 @@ export default {
     data() {
         return {
             title: '',
+            loading: false,
             responsibles: [],
-            notificationMessages: [],
-            loading: false
+            notificationMessages: []
         };
     },
     computed: {
@@ -96,9 +96,9 @@ export default {
 
             this.loading = true;
 
-            return createRisk(data)
-                .then((newRisk) => {
-                    this.$emit('created', newRisk);
+            return createControl(data)
+                .then((newControl) => {
+                    this.$emit('created', newControl);
                 })
                 .finally(() => {
                     this.loading = false;
@@ -109,10 +109,10 @@ export default {
             this.notificationMessages = [];
 
             if (!this.title) {
-                this.notificationMessages.push('You can`t create risk with empty title');
+                this.notificationMessages.push('You can`t create control with empty title');
             }
             if (!this.responsibles.length) {
-                this.notificationMessages.push('Risk should have at least one responsible person');
+                this.notificationMessages.push('Control should have at least one responsible person');
             }
 
             return !this.notificationMessages.length;
