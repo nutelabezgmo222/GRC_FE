@@ -6,6 +6,10 @@ import RisksOverviewPage from '../components/Pages/Risks/RisksOverviewPage.vue';
 import ControlsOverviewPage from '../components/Pages/Controls/ControlsOverviewPage.vue';
 
 import RiskEntryPage from '../components/Pages/Risks/RiskEntryPage.vue';
+import ControlEntryPage from '../components/Pages/Controls/ControlEntryPage.vue';
+import UserEntryPage from '../components/Pages/User/UserEntryPage.vue';
+
+import settingsRoutes from './settings';
 
 const routes = [
     { path: '/', redirect: { name: 'LoginPage' }},
@@ -43,6 +47,18 @@ const routes = [
         name: 'RiskEntryPage'
     },
     {
+        path: '/user/:id',
+        component: UserEntryPage,
+        props: true,
+        name: 'UserEntryPage'
+    },
+    {
+        path: '/control/:id',
+        component: ControlEntryPage,
+        props: true,
+        name: 'ControlEntryPage'
+    },
+    {
         path: '/controls',
         name: 'ControlsWrapper',
         redirect: { name: 'ControlsOverviewPage' },
@@ -60,6 +76,7 @@ const routes = [
             name: 'ControlsOverviewPage',
         }],
     },
+    ...settingsRoutes
 ]
 
 export default routes;

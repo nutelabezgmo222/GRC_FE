@@ -7,6 +7,7 @@
         </p>
 
         <InputField
+          :disabled="headerProps.disabled || false"
           :value="headerProps.title"
           @input="$emit('propertyChanged', { title: $event })"/>
       </div>

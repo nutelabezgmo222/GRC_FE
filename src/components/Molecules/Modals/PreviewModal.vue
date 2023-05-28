@@ -12,12 +12,13 @@
       <Transition name="slide">
         <div
           v-if="display"
-          class="absolute inset-0">
+          class="fixed inset-0 z-20">
           <div class="preview-container absolute bg-white rounded-md">
             <component
               v-if="dataInstance.component"
               :is="dataInstance.component"
-              v-bind="dataInstance.props">
+              v-bind="dataInstance.props"
+              @updated="$emit('updated', $event)">
             </component>
 
             <div
@@ -64,7 +65,7 @@ export default {
 <style scoped>
 .preview-container {
     top: 5%;
-    left: 5%;
+    left: 15%;
     bottom: 5%;
     right: 0;
 }
