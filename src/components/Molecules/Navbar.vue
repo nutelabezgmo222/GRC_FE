@@ -26,7 +26,7 @@
           :key="tab.tab"
           class="icon-wrapper"
           :class="{selected: tab.tab === selectedTab?.tab}"
-          @click="onTabChange(tab.tab)">
+          @click="setTabByName(tab.tab)">
           <FeatherIcon :icon="tab.icon" />
         </div>
       </div>
@@ -75,6 +75,11 @@ export default {
             required: true,
             default: () => []
         },
+        preselectedTab: {
+            type: String,
+            required: false,
+            default: ''
+        },
     },
     data() {
         return {
@@ -92,12 +97,17 @@ export default {
             }));
         },
     },
+    watch: {
+        preselectedTab(newTab) {
+            this.setTabByName(newTab);
+        }
+    },
     beforeMount() {
-        this.selectedTab = this.tabs?.[0];
+        this.selectedTab = this.tabs[0];
     },
     methods: {
-        onTabChange(tabName) {
-            this.selectedTab = this.tabs.find(tab => tab.tab === tabName);
+        setTabByName(tabName) {
+            this.selectedTab = this.tabs.find(tab => tab.tab === tabName) || this.tabs[0];
         },
     },
 };

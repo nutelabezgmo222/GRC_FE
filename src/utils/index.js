@@ -1,5 +1,7 @@
 import RiskEntryPage from '../components/Pages/Risks/RiskEntryPage.vue';
 import ControlEntryPage from '../components/Pages/Controls/ControlEntryPage.vue';
+import UserEntryPage from '../components/Pages/User/UserEntryPage.vue';
+
 import { ObjectTypes } from '../constants/ObjectTypes';
 
 export const getItemComponentByObj = (item) => {
@@ -18,6 +20,21 @@ export const getItemComponentByObj = (item) => {
                     id: item.id
                 },
             };
+        case ObjectTypes.USER:
+            return {
+                component: UserEntryPage,
+                props: {
+                    id: item.id
+                },
+            };
         default: return null;
     };
 };
+
+export const isEmailValid = (mail) => {
+    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail);
+}
+
+export const isPasswordValid = (password) => {
+    return password.length >= 4;
+}

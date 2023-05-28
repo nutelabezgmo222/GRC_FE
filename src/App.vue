@@ -1,29 +1,32 @@
 <template>
-  <div class="app flex flex-row-reverse h-full relative">
+  <div class="app flex flex-row-reverse relative min-h-full">
     <Navbar
       v-if="isUserLogged"
-      class="w-1/5 absolute top-0 bottom-0 transition-all"
+      class="w-1/5 fixed top-0 bottom-0 transition-all"
       :class="hideNavbar ? '-left-full' : ' left-0'"
       :tabs="tabs"
+      :preselected-tab="currentTab"
       @hide="hideNavbar = true" />
 
     <div
-      class="main relative overflow-hidden w-4/5 bg-main-gray p-3 pr-0 transition-all"
+      class="main relative w-4/5 bg-main-gray px-3 pb-3 pr-0 transition-all"
       :class="[hideNavbar || !isUserLogged ? 'w-full' : '', isUserLogged ? 'bg-main-gray' : 'bg-white']">
-      <div>
-        <router-view
-          class="mb-4"
-          name="header" />
+      <div class="sticky top-0 z-10 bg-main-gray py-1">
+        <div>
+          <router-view
+            class="mb-4"
+            name="header" />
+        </div>
+
+        <div
+          v-if="subbarItems.length"
+          class="mb-4">
+          <Subbar :items="subbarItems" />
+        </div>
       </div>
 
-      <div
-        v-if="subbarItems.length"
-        class="mb-4">
-        <Subbar :items="subbarItems" />
-      </div>
-
-      <div class="flex flex-col h-full">
-        <router-view class="flex-grow" name="default" />
+      <div class="flex flex-col flex-grow">
+        <router-view class="flex-grow overflow-auto" name="default" />
       </div>
     </div>
 
@@ -63,20 +66,11 @@ export default {
     data() {
         return {
             tabs: navigation,
-            selectedTab: null,
             hideNavbar: false,
         };
     },
     computed: {
         ...mapGetters(['isUserLogged']),
-        tabItems() {
-            if (!this.tabs) return [];
-
-            return this.tabs.map(item => ({
-                title: item.title,
-                icon: item.icon
-            }));
-        },
         allNavItems() {
             if (!this.tabs) return [];
 
@@ -88,9 +82,19 @@ export default {
         },
         currentNavItem() {
             if (!this.allNavItems?.length) return;
-            const allMatchedNames = this.$route.matched.map(match => match.name);
 
-            return this.allNavItems.find(item => allMatchedNames.includes(item.name));
+            return this.allNavItems.find(item => this.routeMatches.includes(item.name));
+        },
+        currentTab() {
+            if (!this.currentNavItem) return;
+
+            const currentTab = this.tabs.find(tab => tab.children.some(child => child.path === this.currentNavItem.path));
+
+            return currentTab.tab;
+        },
+        routeMatches() {
+            if (!this.$route.matched) return [];
+            return this.$route.matched.map(match => match.name);
         },
         subbarItems() {
             if (!this.currentNavItem) return []
@@ -98,9 +102,7 @@ export default {
             return this.currentNavItem.children || [];
         },
     },
-    beforeMount() {
-        this.selectedTab = this.tabs[0];
-
+    mounted() {
         this.getAllUsers();
     },
     methods: {

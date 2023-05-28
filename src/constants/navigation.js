@@ -23,7 +23,7 @@ export default [{
         }],
     }, {
         title: 'Controls',
-        name: 'ControlWrapper',
+        name: 'ControlsWrapper',
         path: '/controls',
         icon: 'edit',
         children: [{
@@ -41,7 +41,25 @@ export default [{
     tab: 'Settings',
     icon: 'settings',
     children: [{
+        title: 'General',
+        path: '/settings/general',
+        name: 'GeneralWrapper',
+        icon: 'hexagon',
+        children: [{
+            title: 'Users',
+            path: '/settings/general/users'
+        }, {
+            title: 'Admin',
+            path: '/settings/general/admin'
+        }],
+    }, {
+        title: 'Control panel',
+        path: '/settings/control-panel',
+        name: 'ControlPanel',
+        icon: 'tool',
+    }, {
         title: 'Settings',
+        name: 'SettingsPage',
         path: '/settings',
         icon: 'settings',
     }, {
@@ -52,13 +70,5 @@ export default [{
 }, {
     tab: 'Notification',
     icon: 'bell',
-    children: [{
-        title: 'Settings',
-        path: '/settings',
-        icon: 'settings',
-    }, {
-        title: 'Logout',
-        path: '/logout',
-        icon: 'log-out',
-    }],
+    children: [],
 }];

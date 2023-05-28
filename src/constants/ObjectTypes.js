@@ -1,4 +1,5 @@
 export const ObjectTypes = {
     RISK: 'risk',
-    CONTROL: 'control'
+    CONTROL: 'control',
+    USER: 'user'
 };
