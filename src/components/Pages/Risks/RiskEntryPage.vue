@@ -34,28 +34,85 @@
               @input="onRiskPropertyChange({status: $event})" />
           </div>
 
-          <div class="mb-5 flex items-center">
-            <div class="flex">
-              <div class="mr-5">
-                <Title
-                  title="Threat"
-                  type="small" />
-                <SelectorField :options="[{label: 'test', value: 1}]"/>
+          <div class="mb-5">
+            <div class="flex flex-wrap items-center w-full">
+              <div class="basis-1/3 pr-3 flex-grow">
+                <div class="mb-3">
+                  <Title
+                    title="Threat"
+                    type="small" />
+
+                  <MyMultiselect
+                    :value="risk.threat_ids"
+                    :options="threats"
+                    label-prop="title"
+                    value-prop="id"
+                    @input="onRiskPropertyChange({threat_ids: $event})" />
+                </div>
+
+                <div>
+                  <TextField
+                    :value="risk.thr_comment"
+                    @input="onRiskPropertyChange({thr_comment: $event})" />
+                </div>
               </div>
 
-              <div class="mr-5">
-                <Title
-                  title="Level of threat"
-                  type="small" />
-                <SelectorField :options="[{label: 'test', value: 1}]"/>
+              <div class="basis-1/3 pr-3 flex-grow">
+                <div class="mb-3">
+                  <Title
+                    title="Level of threat"
+                    type="small" />
+                  <SingleSelect
+                    :value="risk.thr_lvl_id"
+                    :options="levelOfThreats"
+                    label-prop="title"
+                    value-prop="id"
+                    @input="onRiskPropertyChange({thr_lvl_id: $event})" />
+                </div>
+
+                <div>
+                  <TextField
+                    :value="risk.thr_lvl_comment"
+                    @input="onRiskPropertyChange({thr_lvl_comment: $event})" />
+                </div>
               </div>
 
-              <div>
-                <Title
-                  title="Vulnerability"
-                  type="small" />
-                <SelectorField :options="[{label: 'test', value: 1}]"/>
+              <div class="basis-1/3 pr-3">
+                <div class="mb-3">
+                  <Title
+                    title="Vulnerability"
+                    type="small" />
+                  
+                  <MyMultiselect
+                    :value="risk.vulnerability_ids"
+                    :options="vulnerabilities"
+                    label-prop="title"
+                    value-prop="id"
+                    @input="onRiskPropertyChange({vulnerability_ids: $event})"  />
+                </div>
+
+                <div>
+                  <TextField
+                    :value="risk.vul_comment"
+                    @input="onRiskPropertyChange({vul_comment: $event})" />
+                </div>
               </div>
+            </div>
+          </div>
+
+          <div class="flex">
+            <div class="mr-5">
+              <Button
+                v-if="risk.approved_by"
+                type="remove">
+                Unapprove 
+              </Button>
+
+              <Button
+                v-else
+                type="save">
+                Approve 
+              </Button>
             </div>
 
             <div class="flex flex-grow justify-center">
@@ -69,20 +126,6 @@
               </p>
             </div>
           </div>
-
-          <div>
-            <Button
-              v-if="risk.approved_by"
-              type="remove">
-              Unapprove 
-            </Button>
-
-            <Button
-              v-else
-              type="save">
-              Approve 
-            </Button>
-          </div>
         </div>
       </template>
     </ItemWrapper>
@@ -90,26 +133,28 @@
 </template>
 
 <script>
-import { getRisk, updateRisk } from '../../../api/risks';
+import { getRisk, updateRisk, getRiskAttributes } from '../../../api/risks';
 
 import ItemWrapper from '../../Molecules/ItemBlocks/ItemWrapper.vue';
 
 import LoadingIndicator from '../../Atoms/LoadingIndicator.vue';
 import TextField from '../../Atoms/Fields/TextField.vue';
-import SelectorField from '../../Atoms/Fields/SelectorField.vue';
 import Title from '../../Atoms/Title.vue';
 import Button from '../../Atoms/Button.vue';
 import Notification from '../../Atoms/Notification.vue';
+import SingleSelect from '../../Atoms/Fields/SingleSelect.vue';
+import MyMultiselect from '../../Atoms/Fields/MyMultiselect.vue';
 
 export default {
     components: {
         ItemWrapper,
         LoadingIndicator,
         TextField,
-        SelectorField,
         Title,
         Button,
-        Notification
+        Notification,
+        SingleSelect,
+        MyMultiselect
     },
     props: {
         id: {
@@ -122,6 +167,10 @@ export default {
     data() {
         return {
             risk: null,
+            threats: [],
+            vulnerabilities: [],
+            levelOfThreats: [],
+
             loading: false,
             notificationMessages: []
         };
@@ -133,17 +182,33 @@ export default {
                 title: this.risk.title
             };
         },
+        threatOptions() {
+            return this.threats.map(threat => threat.label = threat.title);
+        },
     },
     beforeMount() {
-        this.getRisk();
+        this.loading = true;
+        let promises = [
+             this.getRisk(),
+             this.getRiskAttributes()
+        ];
+        
+        Promise.all(promises)
+            .finally(() => this.loading = false);
     },
     methods: {
         getRisk() {
-            this.loading = true;
             return getRisk(this.id).then(responce => {
                 this.risk = responce.data;
-                this.loading = false;
             });
+        },
+        getRiskAttributes() {
+            return getRiskAttributes()
+                .then(({threats, vulnerabilities, levelOfThreats}) => {
+                    this.threats = threats;
+                    this.vulnerabilities = vulnerabilities;
+                    this.levelOfThreats = levelOfThreats;
+                });
         },
         onRiskPropertyChange(props) {
             this.risk = {
@@ -161,9 +226,9 @@ export default {
             if (!this.risk.title) {
                 this.notificationMessages.push('You can`t save risk with empty title');
             }
-            if (!this.risk.responsible.length) {
-                this.notificationMessages.push('Risk should have at least one responsible person');
-            }
+            // if (!this.risk.responsible.length) {
+            //     this.notificationMessages.push('Risk should have at least one responsible person');
+            // }
 
             return !this.notificationMessages.length;
         }

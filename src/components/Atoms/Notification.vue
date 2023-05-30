@@ -20,7 +20,7 @@
 
         <div
           class="cursor-pointer absolute top-5 right-6"
-          @click="notificationMessage = ''">
+          @click="onNotificationClose">
           <FeatherIcon icon="x" />
         </div>
       </div>
@@ -55,6 +55,7 @@ export default {
             note: 'miliseconds'
         },
     },
+    emits: ['dismiss'],
     data() {
         return {
             notificationMessage: '',
@@ -79,6 +80,10 @@ export default {
                     this.notificationMessage = '';
                 }, this.hideAfter);
             }
+        },
+        onNotificationClose() {
+            this.notificationMessage = '';
+            this.$emit('dismiss');
         }
     }
 }
