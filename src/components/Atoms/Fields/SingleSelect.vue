@@ -2,6 +2,8 @@
   <VueMultiselect
     :value="selectedValue"
     :options="options"
+    :label="labelProp"
+    :value-prop="valueProp"
     @input="onSingleSelectChange" />
 </template>
 
@@ -24,6 +26,16 @@ export default {
             type: Array,
             required: true,
             default: () => []
+        },
+        labelProp: {
+            type: String,
+            required: false,
+            default: 'label'
+        },
+        valueProp: {
+            type: String,
+            required: false,
+            default: 'value'
         },
     },
     emits: ['input'],
@@ -48,6 +60,8 @@ export default {
 
 <style scoped>
 * {
-    --ms-tag-bg: #0077b6;
+    --ms-option-bg-selected: #0077b6;
+    --ms-option-bg-selected-pointed: #04699f;
+    --ms-ring-color: #04699f4d;
 }
 </style>

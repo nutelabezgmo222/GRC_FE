@@ -43,7 +43,7 @@ export default [{
     children: [{
         title: 'General',
         path: '/settings/general',
-        name: 'GeneralWrapper',
+        name: 'GeneralSettingsWrapper',
         icon: 'hexagon',
         children: [{
             title: 'Users',
@@ -58,9 +58,21 @@ export default [{
         name: 'ControlPanel',
         icon: 'tool',
     }, {
-        title: 'Settings',
+        title: 'Risk settings',
+        name: 'RisksSettingsWrapper',
+        path: '/settings/risks',
+        icon: 'settings',
+        children: [{
+            title: 'Threats and vulnerabilities',
+            path: '/settings/risks/threats'
+        }, {
+            title: 'Risk periods',
+            path: '/settings/risks/periods'
+        }],
+    }, {
+        title: 'Control settings',
         name: 'SettingsPage',
-        path: '/settings',
+        path: '/settings/controls',
         icon: 'settings',
     }, {
         title: 'Logout',

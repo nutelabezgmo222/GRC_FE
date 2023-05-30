@@ -1,5 +1,5 @@
 <template>
-  <div class="px-5 py-10 bg-white rounded-md shadow-md ">
+  <div class="px-5 py-10 bg-white rounded-md shadow-md flex flex-col">
     <div class="flex flex-col mb-10">
       <div class="flex items-center mb-5">
         <p class="mr-5">
@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <div class="p-5 border rounded">
+    <div class="p-5 border rounded overflow-auto">
       <slot name="content" />
     </div>
   </div>

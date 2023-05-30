@@ -5,6 +5,7 @@
     stroke-linecap="round"
     stroke-linejoin="round"
     stroke="currentColor"
+    :stroke-width="strokeWidth"
     :width="`${width}px`"
     :height="`${height}px`"
     :class="fillClass"
@@ -45,6 +46,10 @@ export default {
             type: Boolean,
             default: false,
             note: 'if icon should have diagonal crossing line',
+        },
+        strokeWidth: {
+            type: [String, Number],
+            default: 1,
         },
     },
     emits: ['click'],

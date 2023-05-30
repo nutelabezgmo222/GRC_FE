@@ -5,6 +5,8 @@
     :close-on-select="false"
     :searchable="true"
     :options="options"
+    :label="labelProp"
+    :value-prop="valueProp"
     @input="onMultiselectChange" />
 </template>
 
@@ -27,6 +29,16 @@ export default {
             type: Array,
             required: true,
             default: () => []
+        },
+        labelProp: {
+            type: String,
+            required: false,
+            default: 'label'
+        },
+        valueProp: {
+            type: String,
+            required: false,
+            default: 'value'
         },
     },
     emits: ['input'],
@@ -52,5 +64,6 @@ export default {
 <style scoped>
 * {
     --ms-tag-bg: #0077b6;
+    --ms-ring-color: #04699f4d;
 }
 </style>
