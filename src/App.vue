@@ -9,7 +9,7 @@
       @hide="hideNavbar = true" />
 
     <div
-      class="main relative w-4/5 bg-main-gray px-3 pb-3 pr-0 transition-all"
+      class="main relative w-4/5 bg-main-gray px-3 pb-3 pr-0 transition-all flex flex-col"
       :class="[hideNavbar || !isUserLogged ? 'w-full' : '', isUserLogged ? 'bg-main-gray' : 'bg-white']">
       <div class="sticky top-0 z-10 bg-main-gray py-1">
         <div>

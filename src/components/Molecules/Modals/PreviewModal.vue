@@ -20,6 +20,22 @@
               v-bind="dataInstance.props"
               @updated="$emit('updated', $event)">
             </component>
+            
+            <div
+              v-if="dataInstance.props.fullViewUrl"
+              class="cursor-pointer absolute top-3 right-16"
+              @click="display = false">
+              <div class="border rounded-md">
+                <router-link
+                  class="flex px-4 py-2"
+                  :to="dataInstance.props.fullViewUrl">
+                  <FeatherIcon
+                    icon="arrow-down-left" />
+                  <FeatherIcon
+                    icon="arrow-up-right" />
+                </router-link>
+              </div>
+            </div>
 
             <div
               class="cursor-pointer absolute top-5 right-6"

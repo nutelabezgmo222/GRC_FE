@@ -10,21 +10,24 @@ export const getItemComponentByObj = (item) => {
             return {
                 component: RiskEntryPage,
                 props: {
-                    id: item.id
+                    id: item.id,
+                    fullViewUrl: '/risk/' + item.id
                 },
             };
         case ObjectTypes.CONTROL:
             return {
                 component: ControlEntryPage,
                 props: {
-                    id: item.id
+                    id: item.id,
+                    fullViewUrl: '/control/' + item.id
                 },
             };
         case ObjectTypes.USER:
             return {
                 component: UserEntryPage,
                 props: {
-                    id: item.id
+                    id: item.id,
+                    fullViewUrl: '/user/' + item.id
                 },
             };
         default: return null;

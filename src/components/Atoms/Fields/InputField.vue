@@ -5,6 +5,7 @@
       <input
         v-model="inputValue"
         class="p-2 bg-main-gray border-b-2 w-full rounded"
+        :style="inputStyles"
         :class="{error: error}"
         :type="type"
         :disabled="disabled"
@@ -47,6 +48,11 @@ export default {
             type: String,
             default: '',
             required: false
+        },
+        inputStyles: {
+            type: Object,
+            required: false,
+            default: () => ({}),
         },
     },
     emits: ['input'],
