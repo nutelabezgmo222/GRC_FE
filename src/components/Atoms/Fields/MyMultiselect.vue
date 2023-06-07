@@ -7,6 +7,7 @@
     :options="options"
     :label="labelProp"
     :value-prop="valueProp"
+    :open-direction="openDirection"
     @input="onMultiselectChange" />
 </template>
 
@@ -39,6 +40,12 @@ export default {
             type: String,
             required: false,
             default: 'value'
+        },
+        openDirection: {
+            type: String,
+            required: false,
+            default: 'bottom',
+            validator: value => ['top', 'bottom'].includes(value)
         },
     },
     emits: ['input'],

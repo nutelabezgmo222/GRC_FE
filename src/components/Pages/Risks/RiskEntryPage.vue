@@ -100,6 +100,59 @@
             </div>
           </div>
 
+          <div class="mb-4">
+            <div class="mb-2">
+              <Title
+                :title="riskPeriod.probability_title"
+                type="medium" />
+            </div>
+
+            <div class="grid grid-cols-4 gap-4 mb-2">
+              <div
+                v-for="row in riskPeriod.probability_rows"
+                :key="row.id">
+                <Title
+                  :title="row.label"
+                  type="small" />
+
+                <SingleSelect
+                  :value="risk.probabilities?.[row.id] || []"
+                  :options="row.probability_cols"
+                  :value-prop="'id'"
+                  @input="onRiskPropertyChange({probabilities: {...risk.probabilities, [row.id]: $event}})" />
+              </div>
+            </div>
+
+            <div class="mb-2">
+              <Title
+                :title="riskPeriod.consequence_title"
+                type="medium" />
+            </div>
+
+            <div class="grid grid-cols-4 gap-4 mb-2">
+              <div
+                v-for="row in riskPeriod.consequence_rows"
+                :key="row.id">
+                <Title
+                  :title="row.label"
+                  type="small" />
+
+                <SingleSelect
+                  :value="risk.consequences?.[row.id] || []"
+                  :options="row.consequence_cols"
+                  :open-direction="'top'"
+                  :value-prop="'id'"
+                  @input="onRiskPropertyChange({consequences: {...risk.consequences, [row.id]: $event}})" />
+              </div>
+            </div>
+
+            <div>
+              <p class="text-xl font-semibold">
+                Score value: {{ risk.score }}
+              </p>
+            </div>
+          </div>
+
           <div class="flex">
             <div class="mr-5">
               <Button
@@ -134,6 +187,7 @@
 
 <script>
 import { getRisk, updateRisk, getRiskAttributes } from '../../../api/risks';
+import { getCurrentPeriod } from '../../../api/risks/periods';
 
 import ItemWrapper from '../../Molecules/ItemBlocks/ItemWrapper.vue';
 
@@ -170,6 +224,7 @@ export default {
             threats: [],
             vulnerabilities: [],
             levelOfThreats: [],
+            riskPeriod: null,
 
             loading: false,
             notificationMessages: []
@@ -190,7 +245,8 @@ export default {
         this.loading = true;
         let promises = [
              this.getRisk(),
-             this.getRiskAttributes()
+             this.getRiskAttributes(),
+             this.getCurrentPeriod()
         ];
         
         Promise.all(promises)
@@ -201,6 +257,12 @@ export default {
             return getRisk(this.id).then(responce => {
                 this.risk = responce.data;
             });
+        },
+        getCurrentPeriod() {
+            return getCurrentPeriod()
+                .then(period => {
+                    this.riskPeriod = period;
+                });
         },
         getRiskAttributes() {
             return getRiskAttributes()
@@ -218,7 +280,13 @@ export default {
 
             if (!this.validate()) return;
 
-            return updateRisk(this.risk.id, props);
+            return updateRisk(this.risk.id, props)
+                .then((updatedRisk) => {
+                    this.risk = {
+                        ...this.risk,
+                        ...updatedRisk
+                    };
+                });
         },
         validate() {
             this.notificationMessages = [];

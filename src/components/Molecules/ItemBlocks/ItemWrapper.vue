@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <div class="p-5 border rounded overflow-auto">
+    <div class="p-5 border rounded overflow-auto flex-grow">
       <slot name="content" />
     </div>
   </div>

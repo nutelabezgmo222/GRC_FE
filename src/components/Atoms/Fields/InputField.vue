@@ -5,8 +5,10 @@
       <input
         v-model="inputValue"
         class="p-2 bg-main-gray border-b-2 w-full rounded"
+        :style="inputStyles"
         :class="{error: error}"
         :type="type"
+        :min="minValue"
         :disabled="disabled"
         :placeholder="placeholder">
     </label>
@@ -48,6 +50,21 @@ export default {
             default: '',
             required: false
         },
+        inputStyles: {
+            type: Object,
+            required: false,
+            default: () => ({}),
+        },
+        maxValue: {
+            type: Number,
+            required: false,
+            default: null
+        },
+        minValue: {
+            type: Number,
+            required: false,
+            default: null
+        },
     },
     emits: ['input'],
     data() {
@@ -60,6 +77,9 @@ export default {
     },
     watch: {
         inputValue(newValue) {
+            if (this.maxValue !== null && newValue > this.maxValue) {
+                this.inputValue = this.maxValue;
+            }
             if(newValue === this.value) return;
             clearTimeout(this.timer);
             this.timer = setTimeout(() => {
