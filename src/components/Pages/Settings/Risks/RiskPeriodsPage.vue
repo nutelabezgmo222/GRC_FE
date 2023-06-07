@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div class="pb-10">
     <Notification :message="notificationMessages" />
     <LoadingIndicator v-if="loading" />
 
     <div
       v-else-if="selectedPeriod"
-      class="flex">
-      <div class="w-7/10">
+      class="flex relative">
+      <div class="w-7/10 mr-5">
         <div
           v-if="!creationMode"
           class="flex justify-between">
@@ -86,7 +86,9 @@
             @tableChanged="probabilityTable = $event" />
         </div>
 
-        <div :key="selectedPeriod.id || 1">
+        <div
+          :key="selectedPeriod.id || 1"
+          class="mb-4">
           <div class="pl-10 flex items-center">
             <div
               v-if="creationMode"
@@ -108,6 +110,58 @@
             :min-rows-number="1"
             :read-only="!creationMode"
             @tableChanged="consequenceTable = $event" />
+        </div>
+
+        <div v-if="selectedPeriod.assessment">
+          <Title
+            title="Risk assessment"
+            class="mb-3"
+            type="medium" />
+          
+          <div
+            v-for="(group, idx) in selectedPeriod.assessment"
+            :key="idx"
+            class="flex flex-col p-3 mb-3 border border-black rounded-md bg-white">
+            <div class="flex items-center mb-4">
+              <p class="w-32 mr-3">Group title:</p>
+              <InputField
+                class="w-7/10"
+                :value="group.title"
+                :disabled="!creationMode"
+                @input="group.title = $event" />
+            </div>
+
+            <div class="flex items-center mb-4">
+              <p class="w-32 mr-3">Score border:</p>
+              <InputField
+                class="mr-2 border border-black flex items-center justify-center w-16"
+                type="number"
+                :min-value="0"
+                :max-value="5"
+                :value="group.lower_value"
+                :disabled="!creationMode"
+                @input="group.lower_value = $event" />
+
+              <InputField
+                class="mr-2 border border-black flex items-center justify-center w-16"
+                type="number"
+                :min-value="0"
+                :max-value="5"
+                :value="group.upper_value"
+                :disabled="!creationMode"
+                @input="group.upper_value = $event" />
+            </div>
+
+            <div class="flex items-center mb-4">
+              <p class="w-32 mr-3">Group color:</p>
+              <InputField
+                :value="group.color"
+                type="color"
+                :disabled="!creationMode"
+                :input-styles="{width: '70px', height: '50px'}"
+                @input="group.color = $event" />
+            </div>
+          </div>
         </div>
 
         <Button
@@ -175,6 +229,22 @@ export default {
             consequenceTable: [],
             notificationMessages: [],
             creationMode: false,
+            defaulAssessmentGroups: [{
+                title: 'Low probability/influence risks',
+                color: '#00aa00',
+                lower_value: '0',
+                upper_value: '2.5'
+            }, {
+                title: 'Medium probability/influence risks',
+                color: '#fcba03',
+                lower_value: '2.5',
+                upper_value: '4'
+            },  {
+                title: 'High probability/influence risks',
+                color: '#fc3103',
+                lower_value: '4',
+                upper_value: '5'
+            }],
         };
     },
     computed: {
@@ -223,6 +293,7 @@ export default {
         savePeriod() {
             if (!this.validate()) return;
             const data = {
+                assessment: this.selectedPeriod.assessment,
                 consequenceTable: this.consequenceTable,
                 probabilityTable: this.probabilityTable,
                 title: this.selectedPeriod.title,
@@ -243,6 +314,7 @@ export default {
             this.selectedPeriod.id = null;
 
             this.$nextTick(() => {
+                this.selectedPeriod.assessment = JSON.parse(JSON.stringify(this.defaulAssessmentGroups));
                 this.consequenceTable = JSON.parse(JSON.stringify(this.consequenceRows));
                 this.probabilityTable = JSON.parse(JSON.stringify(this.probabilityRows));
                 this.creationMode = true;
@@ -267,6 +339,9 @@ export default {
           const hasDuplication = this.periods.findIndex(period => period.title === this.selectedPeriod.title) !== -1;
           if (hasDuplication) {
               this.notificationMessages.push('Period title should have a unique value');
+          }
+          if (this.selectedPeriod.assessment.some(group => Object.values(group).some(value => !value))) {
+              this.notificationMessages.push('Please fill all missing fields in risk assessment');
           }
 
           return !this.notificationMessages.length;

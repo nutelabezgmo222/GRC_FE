@@ -129,7 +129,7 @@
                 type="medium" />
             </div>
 
-            <div class="grid grid-cols-4 gap-4">
+            <div class="grid grid-cols-4 gap-4 mb-2">
               <div
                 v-for="row in riskPeriod.consequence_rows"
                 :key="row.id">
@@ -144,6 +144,12 @@
                   :value-prop="'id'"
                   @input="onRiskPropertyChange({consequences: {...risk.consequences, [row.id]: $event}})" />
               </div>
+            </div>
+
+            <div>
+              <p class="text-xl font-semibold">
+                Score value: {{ risk.score }}
+              </p>
             </div>
           </div>
 
@@ -274,7 +280,13 @@ export default {
 
             if (!this.validate()) return;
 
-            return updateRisk(this.risk.id, props);
+            return updateRisk(this.risk.id, props)
+                .then((updatedRisk) => {
+                    this.risk = {
+                        ...this.risk,
+                        ...updatedRisk
+                    };
+                });
         },
         validate() {
             this.notificationMessages = [];

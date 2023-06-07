@@ -8,6 +8,7 @@
         :style="inputStyles"
         :class="{error: error}"
         :type="type"
+        :min="minValue"
         :disabled="disabled"
         :placeholder="placeholder">
     </label>
@@ -54,6 +55,16 @@ export default {
             required: false,
             default: () => ({}),
         },
+        maxValue: {
+            type: Number,
+            required: false,
+            default: null
+        },
+        minValue: {
+            type: Number,
+            required: false,
+            default: null
+        },
     },
     emits: ['input'],
     data() {
@@ -66,6 +77,9 @@ export default {
     },
     watch: {
         inputValue(newValue) {
+            if (this.maxValue !== null && newValue > this.maxValue) {
+                this.inputValue = this.maxValue;
+            }
             if(newValue === this.value) return;
             clearTimeout(this.timer);
             this.timer = setTimeout(() => {
