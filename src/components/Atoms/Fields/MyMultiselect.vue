@@ -21,14 +21,14 @@ export default {
         VueMultiselect
     },
     props: {
-        value: {
+        options: {
             type: Array,
             required: true,
             default: () => []
         },
-        options: {
+        value: {
             type: Array,
-            required: true,
+            required: false,
             default: () => []
         },
         labelProp: {
@@ -55,7 +55,7 @@ export default {
         };
     },
     mounted() {
-        this.selectedValues = this.value.slice();
+        this.selectedValues = this.value ? this.value.slice() : [];
     },
     methods: {
         onMultiselectChange(selectedValues) {

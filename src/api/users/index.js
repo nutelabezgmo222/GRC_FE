@@ -14,3 +14,8 @@ export const updateUser = (id, propsToUpdate) => {
     return Http().patch('/user/' + id, propsToUpdate)
         .then(response => response.data);
 };
+
+export const getRiskUsers = () => {
+    return Http().get('/users?filters=risk')
+        .then(response => response.data);
+};

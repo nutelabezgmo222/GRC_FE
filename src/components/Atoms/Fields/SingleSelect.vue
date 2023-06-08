@@ -18,14 +18,14 @@ export default {
         VueMultiselect
     },
     props: {
-        value: {
-            type: [Array, Number],
-            required: true,
-            default: () => []
-        },
         options: {
             type: Array,
             required: true,
+            default: () => []
+        },
+        value: {
+            type: [Array, Number, String],
+            required: false,
             default: () => []
         },
         labelProp: {
@@ -52,7 +52,7 @@ export default {
         };
     },
     mounted() {
-        this.selectedValue = this.value;
+        this.selectedValue = this.value || '';
     },
     methods: {
         onSingleSelectChange(selectedValue) {

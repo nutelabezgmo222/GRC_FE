@@ -32,9 +32,10 @@
 
     <div
       v-if="hideNavbar"
-      class="bg-main-gray p-3">
+      class="bg-main-gray p-3 relative">
       <Button
         type="util"
+        class="sticky top-3"
         @click="hideNavbar = !hideNavbar">
         <div class="">
           <FeatherIcon
