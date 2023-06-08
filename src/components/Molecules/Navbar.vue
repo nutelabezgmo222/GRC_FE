@@ -31,12 +31,6 @@
         </div>
       </div>
 
-      <div class="mb-4">
-        <InputField
-          class="w-full"
-          title=""/>
-      </div>
-
       <div class="mb-4 overflow-auto">
         <div
           v-for="(item, idx) in navItems"
@@ -59,14 +53,12 @@
 
 <script>
 import FeatherIcon from '../Atoms/FeatherIcon.vue';
-import InputField from '../Atoms/Fields/InputField.vue';
 import Button from '../Atoms/Button.vue';
 
 export default {
     name: 'Navbar',
     components: {
         FeatherIcon,
-        InputField,
         Button
     },
     props: {

@@ -3,8 +3,8 @@ import { getUsers } from '../../api/users';
 export default {
     actions: {
         getAllUsers(ctx) {
-            return getUsers().then(responce => {
-                ctx.commit('setUsers', responce.list);
+            return getUsers().then(response => {
+                ctx.commit('setUsers', response.list);
             });
         },
         addUser(ctx, newUser) {
@@ -39,6 +39,12 @@ export default {
     getters: {
         allUsers: state => {
             return state.users;
+        },
+        riskUsers: state => {
+            return state.users.filter(user => user.r_access_level >= 1 || user.is_admin);
+        },
+        controlUsers: state => {
+            return state.users.filter(user => user.cntrl_access_level >= 1 || user.is_admin);
         },
     },
 };
