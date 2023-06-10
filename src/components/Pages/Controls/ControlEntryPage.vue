@@ -8,31 +8,16 @@
     <ItemWrapper
       v-else
       :header-props="controlHeaderProps"
+      :selected-tab="selectedTab"
       class="h-full"
+      @tabClick="selectedTab = $event"
       @propertyChanged="onControlPropertyChange">
       <template #content>
-        <div>
-          <div class="mb-5">
-            <p class="mb-3">
-              <Title
-                title="Description"
-                type="small" />
-            </p>
-            <TextField
-              :value="control.description"
-              @input="onControlPropertyChange({description: $event})" />
-          </div>
-
-          <div class="mb-5">
-            <p class="mb-3">
-              <Title
-                title="Expected evidence"
-                type="small" />
-            </p>
-            <TextField
-              :value="control.expected_evidence"
-              @input="onControlPropertyChange({expected_evidence: $event})" />
-          </div>
+        <div v-if="selectedComponent">
+          <component
+            :is="selectedComponent"
+            :data="control"
+            @propertyChanged="onControlPropertyChange" />
         </div>
       </template>
     </ItemWrapper>
@@ -45,17 +30,18 @@ import { getControl, updateControl } from '../../../api/controls';
 import ItemWrapper from '../../Molecules/ItemBlocks/ItemWrapper.vue';
 
 import LoadingIndicator from '../../Atoms/LoadingIndicator.vue';
-import TextField from '../../Atoms/Fields/TextField.vue';
-import Title from '../../Atoms/Title.vue';
 import Notification from '../../Atoms/Notification.vue';
+import ControlDescriptionPage from './ControlDescriptionPage.vue';
+import LinksPage from '../General/LinksPage.vue';
+
+import { Tabs } from '../../../constants';
 
 export default {
     components: {
         ItemWrapper,
         LoadingIndicator,
-        TextField,
-        Title,
-        Notification
+        Notification,
+        ControlDescriptionPage
     },
     props: {
         id: {
@@ -69,26 +55,51 @@ export default {
         return {
             control: null,
             loading: false,
+            selectedTab: Tabs.DESCRIPTION.key,
             notificationMessages: []
         };
     },
     computed: {
+        selectedComponent() {
+            switch(this.selectedTab) {
+                case Tabs.DESCRIPTION.key:
+                    return ControlDescriptionPage;
+                case Tabs.LINKS.key:
+                    return LinksPage;
+            }
+        },
         controlHeaderProps() {
             return {
                 id: this.control.id,
-                title: this.control.title
+                title: this.control.title,
+                tabs: [Tabs.DESCRIPTION, Tabs.LINKS]
             };
         },
     },
+    watch: {
+        id() {
+            this.refresh();
+        },
+    },
     beforeMount() {
-        this.getControl();
+        this.loadData();
     },
     methods: {
-        getControl() {
+        refresh() {
+            this.loadData();
+        },
+        loadData() {
             this.loading = true;
+            let promises = [
+                this.getControl(),
+            ];
+            
+            Promise.all(promises)
+                .finally(() => this.loading = false);
+        },
+        getControl() {
             return getControl(this.id).then(responce => {
                 this.control = responce.data;
-                this.loading = false;
             });
         },
         onControlPropertyChange(props) {
