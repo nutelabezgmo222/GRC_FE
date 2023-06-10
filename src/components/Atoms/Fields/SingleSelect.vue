@@ -51,6 +51,11 @@ export default {
             selectedValue: '',
         };
     },
+    watch: {
+        value() {
+            this.selectedValue = this.value || '';
+        },
+    },
     mounted() {
         this.selectedValue = this.value || '';
     },

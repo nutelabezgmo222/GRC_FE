@@ -44,7 +44,7 @@ const routes = [
         path: '/risk/:id',
         component: RiskEntryPage,
         props: true,
-        name: 'RiskEntryPage'
+        name: 'RiskEntryPage',
     },
     {
         path: '/user/:id',
