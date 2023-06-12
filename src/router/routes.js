@@ -63,12 +63,13 @@ const routes = [
         name: 'ControlsWrapper',
         redirect: { name: 'ControlsOverviewPage' },
         children: [{
-            path: 'overview',
+            path: 'overview/:filter?',
             components: {
                 default: ControlsOverviewPage,
-                header: GeneralHeader
+                header: GeneralHeader,
             },
             props: {
+                default: true,
                 header: {
                     title: 'Controls overview'
                 }
