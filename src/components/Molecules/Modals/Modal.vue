@@ -25,13 +25,13 @@
                   class="mr-4"
                   type="save"
                   @click="$emit('submit')">
-                  Save
+                  {{ okButtonText }}
                 </Button>
 
                 <Button
                   type="remove"
                   @click="$emit('cancel')">
-                  Cancel
+                  {{ cancelButtonText }}
                 </Button>
               </div>
             </slot>
@@ -69,6 +69,16 @@ export default {
             type: Boolean,
             required: false,
             default: false,
+        },
+        okButtonText: {
+            type: String,
+            required: false,
+            default: 'Save'
+        },
+        cancelButtonText: {
+            type: String,
+            required: false,
+            default: 'Cancel'
         },
     },
     emits: ['cancel', 'submit']

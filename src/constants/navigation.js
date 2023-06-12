@@ -24,11 +24,14 @@ export default [{
     }, {
         title: 'Controls',
         name: 'ControlsWrapper',
-        path: '/controls',
+        path: '/controls/overview/my',
         icon: 'edit',
         children: [{
             title: 'My controls',
-            path: '/controls/my'
+            path: '/controls/overview/my'
+        }, {
+            title: 'My reviews',
+            path: '/controls/overview/reviews'
         }, {
             title: 'All controls',
             path: '/controls/overview'

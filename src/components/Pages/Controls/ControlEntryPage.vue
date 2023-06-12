@@ -13,7 +13,9 @@
       @tabClick="selectedTab = $event"
       @propertyChanged="onControlPropertyChange">
       <template #content>
-        <div v-if="selectedComponent">
+        <div
+          v-if="selectedComponent"
+          class="h-full">
           <component
             :is="selectedComponent"
             :data="control"

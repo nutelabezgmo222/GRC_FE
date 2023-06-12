@@ -127,7 +127,7 @@ export default {
                     };
                     risk.responsibleIds.forEach(responsibleId => {
                         let responsible = this.allUsers.find(user => user.id === responsibleId);
-                        let groupIdx = result.findIndex(group => group.id === risk.assessmentGroup);
+                        let groupIdx = result.findIndex(group => group.id === responsibleId);
 
                         if (groupIdx !== -1) {
                             result[groupIdx].items.push(risk);
